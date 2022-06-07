@@ -1,0 +1,31 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "CCM",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/computeCCM.py",
+            "args": [
+                "./data/colorchart_photo_strobo_linear.csv",
+                "./data/colorchart_rendered_strobo_linear.csv",
+                "./data/ccm.csv"
+            ],
+        },
+        {
+            "name": "correctColor",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/correctColor.py",
+            "args": [
+                "./data/ccm.csv",
+                "/home/adguerrero/gia_san/datasets/estampillas_syctrace/color_space_lab/data_rgb/test2/img_13_2.jpg",
+                "/home/adguerrero/gia_san/datasets/estampillas_syctrace/color_space_lab/data_rgb/test2/preprocess/img_13_2.jpg",
+                "/home/adguerrero/gia_san/datasets/estampillas_syctrace/color_space_lab/data_rgb/test2/croma_correct/img_13_2.jpg"
+            ],
+        }
+    ]
+}
