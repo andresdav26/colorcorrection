@@ -22,9 +22,8 @@
             "program": "${workspaceFolder}/correctColor.py",
             "args": [
                 "./data/ccm.csv",
-                "/home/adguerrero/gia_san/datasets/estampillas_syctrace/color_space_lab/data_rgb/test2/img_13_2.jpg",
-                "/home/adguerrero/gia_san/datasets/estampillas_syctrace/color_space_lab/data_rgb/test2/preprocess/img_13_2.jpg",
-                "/home/adguerrero/gia_san/datasets/estampillas_syctrace/color_space_lab/data_rgb/test2/croma_correct/img_13_2.jpg"
+                "./test/original/img_2.jpg",
+                "./test/corregida/img_2.jpg",
             ],
         }
     ]

@@ -103,29 +103,31 @@ if __name__ == '__main__':
     gamma = args.gamma
 
     ccm = loadCCM(args.ccm)
-    input_img = Image.open(args.input, 'r').convert("RGB")
+    input_img = Image.open(args.input, 'r').convert('RGB').transpose(1).transpose(5)
     # input_img = preprocess(input_img)
     input_img = deGamma(input_img, gamma=gamma)
     input_img = sRGB2XYZ(input_img)
     input_img = correctColor(input_img, ccm)
+    xyz_img = input_img # almacenar xyz corregido 
     input_img = XYZ2sRGB(input_img)
     input_img = applyGamma(input_img, gamma=gamma)
     input_img.save(args.output)
 
 
-    # # ESTAMPILLA ESTANDAR
-    # estandar = np.array([79.61,5.23,61.31]) # ESTANDAR 
+    # ESTAMPILLA ESTANDAR
+    estandar = np.array([87.73,16.27,100.60]) # ESTANDAR 
 
-    # # MUESTRA 
-    # muestra = color.rgb2lab(input_img, illuminant= 'D65', observer='2')
-    # muestra = np.array([np.median(muestra[:,:,0]),np.median(muestra[:,:,1]),np.median(muestra[:,:,2])])
+    # MUESTRA 
+    muestra = color.xyz2lab(xyz_img, illuminant= 'D50', observer='2')
+    muestra = np.array([np.median(muestra[:,:,0]),np.median(muestra[:,:,1]),np.median(muestra[:,:,2])])
 
-    # # ERROR
-    # DE, DL, Da, Db = deltaE(estandar, muestra)
+    # ERROR
+    DE, DL, Da, Db = deltaE(estandar, muestra)
 
-    # print('DL = ' + str(DL))
-    # print('Da = ' + str(Da))
-    # print('Db = ' + str(Db))
+    print('DE = ' + str(DE))
+    print('DL = ' + str(DL))
+    print('Da = ' + str(Da))
+    print('Db = ' + str(Db))
 
     # if DE <= 2.50: 
     #     print(': DeltaE = ' + str(round(DE,2)) + '  TRUE')
