@@ -22,8 +22,8 @@
             "program": "${workspaceFolder}/correctColor.py",
             "args": [
                 "./data/ccm.csv",
-                "./test/original/img_2.jpg",
-                "./test/corregida/img_2.jpg",
+                "./test/original/img_20220722_100750.jpg",
+                "./test/corregida/img_20220722_100750.jpg",
             ],
         }
     ]

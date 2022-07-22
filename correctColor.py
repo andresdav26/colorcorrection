@@ -80,7 +80,7 @@ def XYZ2sRGB(img):
     # D50
     xyz2rgb = (3.1338561, -1.6168667, -0.4906146, 0,
                -0.9787684,  1.9161415,  0.0334540, 0,
-               0.0719453, -0.2289914,  1.4052427, 0)
+               0.0719453, -0.2289914,  1.4052427, 0,)
     # D65
     # xyz2rgb = (3.240970, -1.537383, -0.498611, 0,
     #            -0.969244, 1.875968, 0.041555, 0,
@@ -103,7 +103,8 @@ if __name__ == '__main__':
     gamma = args.gamma
 
     ccm = loadCCM(args.ccm)
-    input_img = Image.open(args.input, 'r').convert('RGB').transpose(1).transpose(5)
+    # input_img = Image.open(args.input)
+    input_img = Image.open(args.input, 'r').transpose(1).transpose(5)
     # input_img = preprocess(input_img)
     input_img = deGamma(input_img, gamma=gamma)
     input_img = sRGB2XYZ(input_img)
