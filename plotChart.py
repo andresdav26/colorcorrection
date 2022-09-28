@@ -8,30 +8,38 @@ import math
 from PIL import Image, ImageDraw, ImageFont
 import matplotlib.pyplot as plt
 
+# def csvfile2nparray(f):
+#     str_data = f.read()
+#     lines = str_data.replace(' ', '').split('\n')
+#     del lines[len(lines) - 1]
+
+#     data = list()
+#     cells = list()
+
+#     for i in range(len(lines)):
+#         cells.append(lines[i].split(','))
+
+#     start_row = 0
+#     if not cells[0][0].replace(".","",1).isdigit():
+#         del cells[0]
+#         start_row = 1
+
+#     i = 0
+#     for line in cells:
+#         data.append(list())
+#         for j in range(start_row, len(line)):
+#             data[i].append(float(line[j]))
+#         i += 1
+#     # print(data)
+
+#     return np.asarray(data, dtype=np.float32)
+
 def csvfile2nparray(f):
-    str_data = f.read()
-    lines = str_data.replace(' ', '').split('\n')
-    del lines[len(lines) - 1]
-
-    data = list()
-    cells = list()
-
-    for i in range(len(lines)):
-        cells.append(lines[i].split(','))
-
-    start_row = 0
-    if not cells[0][0].replace(".","",1).isdigit():
-        del cells[0]
-        start_row = 1
-
-    i = 0
-    for line in cells:
-        data.append(list())
-        for j in range(start_row, len(line)):
-            data[i].append(float(line[j]))
-        i += 1
-    # print(data)
-
+    '''Load color chart data
+        Input CSV's shape is (25, 4), which contains one extra row and column.
+    '''
+    data = np.loadtxt(f, delimiter=",", skiprows=1, usecols=(1, 2, 3))
+    assert data.shape == (24, 3)
     return np.asarray(data, dtype=np.float32)
 
 def loadCCM(ccmCsvFile) :
@@ -81,20 +89,20 @@ def drawChartComparison(reference, corrected, matchRatio):
                             fill=(0, 0, 0))
     return im
 
-def saveResultImg(chart, graph, filename):
+def saveResultImg(chart, filename):
     offset = 0
-    dst = Image.new('RGB', (max(chart.width, graph.width) + offset,
-                            chart.height + graph.height + offset),
+    dst = Image.new('RGB', (chart.width + offset,
+                            chart.height + offset),
                     (255, 255, 255))
     dst.paste(chart, (0, 0))
-    dst.paste(graph, (0, chart.height + offset))
+    # dst.paste(graph, (0, chart.height + offset))
     dst.save('{}.png'.format(filename))
 
 def sRGB2XYZ(rgbList):
     # D 50
-    # M = np.array([[0.4360747  0.3850649  0.1430804]
-    #                  [0.2225045  0.7168786  0.0606169]
-    #                  [0.0139322  0.0971045  0.7141733]])
+    # M = np.array([[0.4360747,  0.3850649,  0.1430804],
+    #               [0.2225045,  0.7168786,  0.0606169],
+    #               [0.0139322,  0.0971045,  0.7141733]])
     # D 65
     M = np.array([[0.412391, 0.357584, 0.180481],
                   [0.212639, 0.715169, 0.072192],
@@ -108,9 +116,9 @@ def sRGB2XYZ(rgbList):
 
 def XYZ2sRGB(rgbList):
     # D 50
-    # M = np.array([[3.1338561 -1.6168667 -0.4906146]
-    #                  [-0.9787684  1.9161415  0.0334540]
-    #                  [0.0719453 -0.2289914  1.4052427]])
+    # M = np.array([[3.1338561, -1.6168667, -0.4906146],
+    #               [-0.9787684,  1.9161415,  0.0334540],
+    #               [0.0719453, -0.2289914,  1.4052427]])
     # D 65
     M = np.array([[3.240970, -1.537383, -0.498611],
                   [-0.969244, 1.875968, 0.041555],
@@ -147,8 +155,8 @@ if __name__ == '__main__':
     #gamma = args.gamma
 
     ccm = loadCCM(args.ccm)
-    reference = csvfile2nparray(args.referenceCsv)
-    source = csvfile2nparray(args.sourceCsv)
+    reference = np.power(csvfile2nparray(args.referenceCsv)/255, 2.2)
+    source = np.power(csvfile2nparray(args.sourceCsv)/255, 1.05)
 
     correctedSource = correctChart(source, ccm)
     diff = np.absolute(np.subtract(reference, correctedSource))
@@ -158,15 +166,15 @@ if __name__ == '__main__':
                              100)
     diffIm = drawChartComparison(reference, correctedSource, matchRatio)
 
-    plt.ylim([-15, 15])
-    plt.axes().yaxis.grid(True)
-    plt.xlim([-1, 24])
-    plt.hlines([0], -1, 25, "red")
-    plt.bar(np.arange(len(matchRatio)), matchRatio, align="center", width=0.7)
-    plt.vlines([5.5, 11.5, 17.5, 23.5], -20, 20, "red")
-    plt.xlabel("Patch")
-    plt.ylabel("Match %")
-    plt.savefig('graph.png')
+    # plt.ylim([-15, 15])
+    # plt.axes().yaxis.grid(True)
+    # plt.xlim([-1, 24])
+    # plt.hlines([0], -1, 25, "red")
+    # plt.bar(np.arange(len(matchRatio)), matchRatio, align="center", width=0.7)
+    # plt.vlines([5.5, 11.5, 17.5, 23.5], -20, 20, "red")
+    # plt.xlabel("Patch")
+    # plt.ylabel("Match %")
+    # plt.savefig('graph.png')
 
-    graphIm = Image.open('graph.png', 'r')
-    saveResultImg(diffIm, graphIm, args.outputbasename)
+    # graphIm = Image.open('graph.png', 'r')
+    saveResultImg(diffIm, args.outputbasename)

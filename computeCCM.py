@@ -17,9 +17,9 @@ def load_colorchart_csv(f):
 
 def conv_sRGB2XYZ(rgb):
     # D 50
-    # M = np.array([[0.4360747  0.3850649  0.1430804]
-    #               [0.2225045  0.7168786  0.0606169]
-    #               [0.0139322  0.0971045  0.7141733]])
+    # M = np.array([[0.4360747,  0.3850649,  0.1430804],
+    #               [0.2225045,  0.7168786,  0.0606169],
+    #               [0.0139322,  0.0971045,  0.7141733]])
     # D 65
     M = np.array([[0.412391, 0.357584, 0.180481],
                   [0.212639, 0.715169, 0.072192],
@@ -31,20 +31,19 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('reference_csv', type=argparse.FileType('r'))
     parser.add_argument('source_csv', type=argparse.FileType('r'))
-    parser.add_argument('output_csv', type=argparse.FileType('w'),
-                        default='ccm.csv')
-    parser.add_argument('-g', '--gamma', type=float, default=1.0,
+    parser.add_argument('output_csv', type=argparse.FileType('w'),default='ccm.csv')
+    parser.add_argument('-g', '--gamma', type=float, default=2.2,
                         help='Gamma value of reference and source data.')
     args = parser.parse_args()
     gamma = args.gamma
 
     # Load color charts
-    reference_raw = load_colorchart_csv(args.reference_csv)
-    source_raw = load_colorchart_csv(args.source_csv)
+    reference_raw = load_colorchart_csv(args.reference_csv)/255
+    source_raw = load_colorchart_csv(args.source_csv)/255
 
     # Degamma
     reference_linear = np.power(reference_raw, gamma)
-    source_linear = np.power(source_raw, gamma)
+    source_linear = np.power(source_raw, 1.03)
 
     # XYZ
     reference_xyz = conv_sRGB2XYZ(reference_linear)

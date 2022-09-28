@@ -5,14 +5,26 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "plotchart",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/plotChart.py",
+            "args": [
+                "./data/ccm2.csv",
+                "./data/color_reference.csv",
+                "./data/color_source.csv",
+                "chart"
+            ],
+        },
+        {
             "name": "CCM",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/computeCCM.py",
             "args": [
-                "./data/colorchart_photo_strobo_linear.csv",
-                "./data/colorchart_rendered_strobo_linear.csv",
-                "./data/ccm.csv"
+                "./data/color_reference.csv",
+                "./data/color_source.csv",
+                "./data/ccm2.csv"
             ],
         },
         {
@@ -22,8 +34,8 @@
             "program": "${workspaceFolder}/correctColor.py",
             "args": [
                 "./data/ccm.csv",
-                "./test/original/img_20220722_100750.jpg",
-                "./test/corregida/img_20220722_100750.jpg",
+                "./dataset/true/",
+                "./dataset/",
             ],
         }
     ]
