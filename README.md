@@ -6,89 +6,17 @@ Let P be a reference color checker matrix (24 x 3) and O be a color checker
 matrix to correct (24 x 3).  
 `P = [O 1] A`
 
-![reference](./img/referenceStrobo.png)
-![image to correct](./img/renderedStrobo.png)
-
-## Data
-We have to prepare color checker patch data as csv format.
-There are example data in `data` directory.
-- `data/colorchart_photo_strobo_linear.csv`
-- `data/colorchart_rendered_strobo_linear.csv`  
-
-They are 24x3 matrix. The data are made by reading pixel values using [Natron2](https://natron.fr/)
-
 ## Dependency
 - Python
     - numpy
     - matplotlib
     - Pillow 
-    - OpenEXR
-- C++
-    - args.hxx(included in this repo)
-    - Eigen3
-
-## Build c++ version of computeCCM
-
-``` shell
-$ cd cpp
-$ mkdir build
-$ cmake ../
-$ make
-```
 
 ## Usage
 ``` shell 
-# computeCCM.py [-h] [-g GAMMA] reference_csv source_csv output_csv
-$ computeCCM.py data/colorchart_photo_strobo_linear.csv data/colorchart_rendered_strobo_linear.csv ccm.csv
+# python computeCCM.py reference_csv source_csv output_csv
 ```
 This command generates optimal Color Correction Matrix as csv file (`ccm.csv`)
-
-## Test
-We can compare reference data and corrected data using `plotChart.py`
-
-``` shell
-$ plotChart.py ccm.csv data/colorchart_photo_strobo_linear.csv data/colorchart_rendered_strobo_linear.csv ccm.csv chart
-```
-![plot chart](img/result_strobo.png)
-
-Each patch shows reference color and corrected color.
-Upper one is reference and lower one is corrected color.
-The numbers mean relative error.
-
-# Color Correction
-Correct given image using CCM.
-`correctColor.py` reads jpg or png images, and
-`correctColorExr.py` reads exr images.
-
-## Usage
-``` shell
-$ correctColor.py ccm.csv reference.png corrected
-```
-
-![result](img/stroboCorrected.png)  
-corrected image
-
-# Image Diff
-
-Generate diff image between a reference image and a corrected image. We compute a difference between two images and take average of rgb for each pixels.
-
-## Usage
-``` shell
-$ imageDiff.py photo_reference.png corrected.png
-```
-![diff](img/diffImg.png)
-
-The difference is small as the color approaches blue and 
-the difference is big as the color approaches red.
-
-# License
-
-CCM is licensed under MIT license.
-
-## Third party licenses
-- [args.hxx](https://github.com/Taywee/args) is licensed under MIT License
-- [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) is licensed under Mozilla Public License
-
 
 # References
 

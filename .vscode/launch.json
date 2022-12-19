@@ -22,9 +22,9 @@
             "request": "launch",
             "program": "${workspaceFolder}/computeCCM.py",
             "args": [
-                "./data/color_reference.csv",
-                "./data/color_source.csv",
-                "./data/ccm2.csv"
+                "/home/adguerrero/Documents/colorcorrectionmatrix/data/color_reference.csv",
+                "/home/adguerrero/Documents/colorcorrectionmatrix/data/color_source.csv",
+                "/home/adguerrero/Documents/colorcorrectionmatrix/data/ccm2.csv"
             ],
         },
         {
